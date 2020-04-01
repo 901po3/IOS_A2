@@ -16,6 +16,12 @@ class GameScene: SKScene {
     var joystick : SKNode?
     var joystickKnob : SKNode?
     
+    //boolean
+    var joystickAction = false
+    
+    //Measure
+    var knobRadius : CGFloat = 50.0
+    
     //didmove
     override func didMove(to view: SKView) {
         player = childNode(withName: "player")
@@ -25,3 +31,17 @@ class GameScene: SKScene {
 }
 
 //MARK: Touches
+extension GameScene{
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let joystick = joystick else { return }
+        guard let joystickKnob = joystickKnob else { return }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+    }
+}
