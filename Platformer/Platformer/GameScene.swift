@@ -31,6 +31,7 @@ class GameScene: SKScene {
     
     //Measure
     var knobRadius : CGFloat = 50.0
+    var jumpInterval : CGFloat = 0.0
     
     //Sprite Engine
     var previousTimeInterval : TimeInterval = 0
@@ -66,6 +67,11 @@ class GameScene: SKScene {
         ])
         
         playerStateMachine.enter(IdleState.self)
+        
+        // Timer
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
+            self.spawnMeteor()
+        }
     }
 }
 
@@ -178,7 +184,7 @@ extension GameScene {
         
         // Player Jump
         if joystickKnob.position.y > 20 && !jumping {
-            //jumping = true
+            jumping = true
             playerStateMachine.enter(JumpingState.self)
             
  
@@ -193,8 +199,8 @@ extension GameScene: SKPhysicsContactDelegate {
     struct Collision {
         
         enum Masks: Int {
-            case killing, player, reward, ground //0,1,2,3,4
-            var bitmask: UInt32 { return 1 << self.rawValue } //0,1,2,4,8
+            case killing, player, reward, ground //1,2,3,4
+            var bitmask: UInt32 { return 1 << self.rawValue } //1,2,4,8
         }
         
         let masks: (first: UInt32, second: UInt32)
@@ -211,7 +217,45 @@ extension GameScene: SKPhysicsContactDelegate {
         
         if collision.matches(.player, .killing) {
             let die = SKAction.move(to: CGPoint(x: -300, y: -100), duration: 0.0) //back to initial position
+            os_log("trap")
             player?.run(die)
         }
+        
+        if collision.matches(.player, .ground) {
+            
+            jumping = false
+            
+        }
+    }
+}
+
+
+//MARK: Meteor
+extension GameScene {
+    
+    func spawnMeteor() {
+    
+        let node = SKSpriteNode(imageNamed: "meteor")
+        node.name = "Meteor"
+        let randomXPosition = Int(arc4random_uniform(UInt32(self.size.width)))
+        
+        node.position = CGPoint(x: randomXPosition, y: 270)
+        node.anchorPoint = CGPoint(x: 0.5, y: 1)
+        node.zPosition = 5
+        
+        let physcisBody = SKPhysicsBody(circleOfRadius: 30)
+        node.physicsBody = physicsBody
+        
+        physicsBody?.categoryBitMask = Collision.Masks.killing.bitmask
+        physicsBody?.collisionBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.contactTestBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.fieldBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        
+        physcisBody.affectedByGravity = true
+        physcisBody.allowsRotation = false
+        physcisBody.restitution = 0.2
+        physcisBody.friction = 10
+        
+        addChild(node)
     }
 }
