@@ -8,16 +8,19 @@
 
 import SpriteKit
 import GameplayKit
+import os.log
 
 class GameScene: SKScene {
     	
     //Nodes
     var player : SKNode?
+    var ground : SKNode?
     var joystick : SKNode?
     var joystickKnob : SKNode?
     
     //boolean
     var joystickAction = false
+    var jumping = false
     
     //Measure
     var knobRadius : CGFloat = 50.0
@@ -27,11 +30,25 @@ class GameScene: SKScene {
     var playerIsFacingRight = true
     let playerSpeed = 4.0
     
+    //Player State
+    var playerStateMachine : GKStateMachine!
+    
     //didmove
     override func didMove(to view: SKView) {
         player = childNode(withName: "player")
+        ground = childNode(withName: "ground")
         joystick = childNode(withName: "Joystick")
         joystickKnob = joystick?.childNode(withName: "knob")
+
+        playerStateMachine = GKStateMachine(states: [
+            JumpingState(playerNode: player!),
+            WalkingState(playerNode: player!),
+            IdleState(playerNode: player!),
+            LandingState(playerNode: player!),
+            StunnedState(playerNode: player!)
+        ])
+        
+        playerStateMachine.enter(IdleState.self)
     }
 }
 
@@ -43,6 +60,11 @@ extension GameScene{
                 let location = touch.location(in: joystick!)
                 joystickAction = joystickKnob.frame.contains(location)
             }
+            
+            //let location = touch.location(in: self)
+            //if !(joystick?.contains(location))! {
+            //    playerStateMachine.enter(JumpingState.self)
+            //}
         }
     }
     
@@ -100,6 +122,13 @@ extension GameScene {
         // Player Movement
         guard let joystickKnob = joystickKnob else { return }
         let xPostion = Double(joystickKnob.position.x)
+        let positivePosition = xPostion < 0 ? -xPostion : xPostion
+        
+        if(floor(positivePosition) != 0) {
+            playerStateMachine.enter(WalkingState.self)
+        } else {
+            playerStateMachine.enter(IdleState.self)
+        }
         let displacement = CGVector(dx: deltaTime * xPostion * playerSpeed, dy: 0)
         let move = SKAction.move(by: displacement, duration: 0)
         let faceAction : SKAction!
@@ -117,5 +146,12 @@ extension GameScene {
             faceAction = move
         }
         player?.run(faceAction)
+        
+
+        if joystickKnob.position.y > 20 && !jumping {
+            //jumping = true
+            playerStateMachine.enter(JumpingState.self)
+        }
     }
+    
 }
