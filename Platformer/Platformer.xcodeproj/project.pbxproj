@@ -17,6 +17,7 @@
 		60A7884B2432B06D0043B782 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60A788492432B06D0043B782 /* LaunchScreen.storyboard */; };
 		60A788562432B06D0043B782 /* PlatformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A788552432B06D0043B782 /* PlatformerTests.swift */; };
 		60A788612432B06D0043B782 /* PlatformerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A788602432B06D0043B782 /* PlatformerUITests.swift */; };
+		60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB3AE22434350E001D4BCF /* playerStateMachine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		60A7885C2432B06D0043B782 /* PlatformerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlatformerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		60A788602432B06D0043B782 /* PlatformerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformerUITests.swift; sourceTree = "<group>"; };
 		60A788622432B06D0043B782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60CB3AE22434350E001D4BCF /* playerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playerStateMachine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				60A7883C2432B06A0043B782 /* GameScene.sks */,
 				60A7883E2432B06A0043B782 /* Actions.sks */,
 				60A788402432B06A0043B782 /* GameScene.swift */,
+				60CB3AE22434350E001D4BCF /* playerStateMachine.swift */,
 				60A788422432B06A0043B782 /* GameViewController.swift */,
 				60A788442432B06A0043B782 /* Main.storyboard */,
 				60A788472432B06D0043B782 /* Assets.xcassets */,
@@ -269,6 +272,7 @@
 			files = (
 				60A788412432B06A0043B782 /* GameScene.swift in Sources */,
 				60A788432432B06A0043B782 /* GameViewController.swift in Sources */,
+				60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */,
 				60A7883B2432B06A0043B782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
