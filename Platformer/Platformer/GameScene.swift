@@ -14,9 +14,16 @@ class GameScene: SKScene {
     	
     //Nodes
     var player : SKNode?
-    var ground : SKNode?
     var joystick : SKNode?
     var joystickKnob : SKNode?
+    var cameraNode : SKNode?
+    var mountain1 : SKNode?
+    var mountain2 : SKNode?
+    var mountain3 : SKNode?
+    var mountain4 : SKNode?
+    var star1 : SKNode?
+    var star2 : SKNode?
+    var moon : SKNode?
     
     //boolean
     var joystickAction = false
@@ -35,10 +42,20 @@ class GameScene: SKScene {
     
     //didmove
     override func didMove(to view: SKView) {
+        
+        physicsWorld.contactDelegate = self
+        
         player = childNode(withName: "player")
-        ground = childNode(withName: "ground")
         joystick = childNode(withName: "Joystick")
         joystickKnob = joystick?.childNode(withName: "knob")
+        cameraNode = childNode(withName: "CameraNode")
+        mountain1 = childNode(withName: "mountain1")
+        mountain2 = childNode(withName: "mountain2")
+        mountain3 = childNode(withName: "mountain3")
+        mountain4 = childNode(withName: "mountain4")
+        star1 = childNode(withName: "star1")
+        star2 = childNode(withName: "star2")
+        moon = childNode(withName: "moon")
 
         playerStateMachine = GKStateMachine(states: [
             JumpingState(playerNode: player!),
@@ -119,6 +136,11 @@ extension GameScene {
         let deltaTime = currentTime - previousTimeInterval
         previousTimeInterval = currentTime
         
+        //Camera
+        cameraNode?.position.x = player!.position.x
+        joystick?.position.y = (cameraNode?.position.y)! - 100
+        joystick?.position.x = (cameraNode?.position.x)! - 300
+        
         // Player Movement
         guard let joystickKnob = joystickKnob else { return }
         let xPostion = Double(joystickKnob.position.x)
@@ -147,11 +169,49 @@ extension GameScene {
         }
         player?.run(faceAction)
         
-
+        // Background Parallax
+             
+            let parallx4 = SKAction.moveTo(x: (cameraNode?.position.x)!, duration: 0.0)
+            star1?.run(parallx4)
+            star2?.run(parallx4)
+            moon?.run(parallx4)
+        
+        // Player Jump
         if joystickKnob.position.y > 20 && !jumping {
             //jumping = true
             playerStateMachine.enter(JumpingState.self)
+            
+ 
+
+        }
+    }
+}
+
+//MARK: Collision
+extension GameScene: SKPhysicsContactDelegate {
+    
+    struct Collision {
+        
+        enum Masks: Int {
+            case killing, player, reward, ground //0,1,2,3,4
+            var bitmask: UInt32 { return 1 << self.rawValue } //0,1,2,4,8
+        }
+        
+        let masks: (first: UInt32, second: UInt32)
+        
+        func matches (_ first: Masks, _ second: Masks) -> Bool {
+            return (first.bitmask == masks.first && second.bitmask == masks.second) ||
+                (first.bitmask == masks.second && second.bitmask == masks.first)
         }
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        let collision = Collision(masks: (first: contact.bodyA.categoryBitMask, second: contact.bodyB.categoryBitMask))
+        
+        if collision.matches(.player, .killing) {
+            let die = SKAction.move(to: CGPoint(x: -300, y: -100), duration: 0.0) //back to initial position
+            player?.run(die)
+        }
+    }
 }
