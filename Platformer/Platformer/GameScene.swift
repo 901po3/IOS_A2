@@ -61,6 +61,9 @@ class GameScene: SKScene {
         
         physicsWorld.contactDelegate = self
         
+        let soundAction = SKAction.repeatForever(SKAction.playSoundFileNamed("music.wav", waitForCompletion: false))
+        run(soundAction)
+        
         player = childNode(withName: "player")
         joystick = childNode(withName: "Joystick")
         joystickKnob = joystick?.childNode(withName: "knob")
@@ -121,6 +124,7 @@ extension GameScene{
                 let location = touch.location(in: joystick!)
                 joystickAction = joystickKnob.frame.contains(location)
             }
+            
             
             //let location = touch.location(in: self)
             //if !(joystick?.contains(location))! {
@@ -312,6 +316,7 @@ extension GameScene: SKPhysicsContactDelegate {
         
         if collision.matches(.player, .killing)  {
             if isHit == false {
+                run(Sound.hit.action)
                 isHit = true
                 loseHeart()
                 Dying()
@@ -330,6 +335,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 if rewardIsNotTouched {
                     rewardTouch()
                     rewardIsNotTouched = false
+                    run(Sound.reward.action)
                 }
             } else if contact.bodyB.node?.name == "jewel" {
                 contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
@@ -337,6 +343,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 if rewardIsNotTouched {
                     rewardTouch()
                     rewardIsNotTouched = false
+                    run(Sound.reward.action)
                 }
             }
 
@@ -346,11 +353,13 @@ extension GameScene: SKPhysicsContactDelegate {
                 contact.bodyA.node?.removeFromParent()
                 keyContainer.alpha = 1.0
                 hasKey = true
+                run(Sound.reward.action)
             } else if contact.bodyB.node?.name == "key" {
                 contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
                 contact.bodyB.node?.removeFromParent()
                 keyContainer.alpha = 1.0
                 hasKey = true
+                run(Sound.reward.action)
             }
             
         }
@@ -358,12 +367,16 @@ extension GameScene: SKPhysicsContactDelegate {
         if collision.matches(.player, .door) {
             if contact.bodyA.node?.name == "door" && hasKey {
                 contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
-                os_log("go to next level")
                 doorOpen = true
+                if doorOpen {
+                    os_log("go to next level")
+                }
             } else if contact.bodyB.node?.name == "door" && hasKey {
                 contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
-                os_log("go to next level")
                 doorOpen = true
+                if doorOpen {
+                    os_log("go to next level")
+                }
             }
         }
         
@@ -376,6 +389,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 createMolten(at: meteor.position)
                 meteor.removeFromParent()
             }
+            run(Sound.meteorFalling.action)
         }
     }
 }
