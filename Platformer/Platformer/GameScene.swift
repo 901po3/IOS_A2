@@ -28,10 +28,15 @@ class GameScene: SKScene {
     //boolean
     var joystickAction = false
     var jumping = false
+    var rewardIsNotTouched = true
     
     //Measure
     var knobRadius : CGFloat = 50.0
     var jumpInterval : CGFloat = 0.0
+    
+    // Score
+    let scoreLabel = SKLabelNode()
+    var score = 0
     
     //Sprite Engine
     var previousTimeInterval : TimeInterval = 0
@@ -69,9 +74,18 @@ class GameScene: SKScene {
         playerStateMachine.enter(IdleState.self)
         
         // Timer
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
-            self.spawnMeteor()
-        }
+        //Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
+        //    os_log("timer fired")
+        //    self.spawnMeteor()
+        //}
+        
+        scoreLabel.position = CGPoint(x: (cameraNode?.position.x)! +  310, y: 140)
+        scoreLabel.fontColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
+        scoreLabel.fontSize = 24
+        scoreLabel.fontName = "AvenirNext-Bold"
+        scoreLabel.horizontalAlignmentMode = .right
+        scoreLabel.text = String(score)
+        cameraNode?.addChild(scoreLabel)
     }
 }
 
@@ -126,6 +140,7 @@ extension GameScene{
 
 //MARK: Action
 extension GameScene {
+    
     func resetKnobPosition() {
         let initialPoint = CGPoint(x: 0, y: 0)
         //let moveBack = SKAction.move(to: initialPoint, duration: 0.1)
@@ -134,6 +149,11 @@ extension GameScene {
         joystickKnob?.position = initialPoint
         joystickAction = false
     }
+    
+    func rewardTouch() {
+        score += 1
+        scoreLabel.text = String(score)
+    }
 }
 
 //MARK : Game Loop
@@ -141,6 +161,8 @@ extension GameScene {
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - previousTimeInterval
         previousTimeInterval = currentTime
+        
+        rewardIsNotTouched = true
         
         //Camera
         cameraNode?.position.x = player!.position.x
@@ -222,9 +244,34 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         if collision.matches(.player, .ground) {
-            
             jumping = false
+        }
+        
+        if collision.matches(.player, .reward) {
             
+            if contact.bodyA.node?.name == "jewel" {
+                contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyA.node?.removeFromParent()
+            } else if contact.bodyB.node?.name == "jewel" {
+                contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyB.node?.removeFromParent()
+            }
+            
+            if rewardIsNotTouched {
+                rewardTouch()
+                rewardIsNotTouched = false
+            }
+        }
+        
+        if collision.matches(.ground, .killing) {
+            if contact.bodyA.node?.name == "Meteor", let meteor = contact.bodyA.node {
+                createMolten(at: meteor.position)
+                meteor.removeFromParent()
+            }
+            if contact.bodyB.node?.name == "Meteor", let meteor = contact.bodyB.node {
+                createMolten(at: meteor.position)
+                meteor.removeFromParent()
+            }
         }
     }
 }
@@ -239,23 +286,42 @@ extension GameScene {
         node.name = "Meteor"
         let randomXPosition = Int(arc4random_uniform(UInt32(self.size.width)))
         
-        node.position = CGPoint(x: randomXPosition, y: 270)
+        node.position = CGPoint(x: randomXPosition, y: 0)
         node.anchorPoint = CGPoint(x: 0.5, y: 1)
         node.zPosition = 5
         
         let physcisBody = SKPhysicsBody(circleOfRadius: 30)
-        node.physicsBody = physicsBody
-        
-        physicsBody?.categoryBitMask = Collision.Masks.killing.bitmask
-        physicsBody?.collisionBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
-        physcisBody.contactTestBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
-        physcisBody.fieldBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
         
         physcisBody.affectedByGravity = true
         physcisBody.allowsRotation = false
         physcisBody.restitution = 0.2
         physcisBody.friction = 10
+                
+        physicsBody!.categoryBitMask = Collision.Masks.killing.bitmask
+        physicsBody!.collisionBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.contactTestBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.fieldBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        
+        node.physicsBody = physcisBody
         
         addChild(node)
+    }
+    
+    func createMolten(at position: CGPoint) {
+        let node = SKSpriteNode(imageNamed: "molten")
+        node.position.x = position.x
+        node.position.y = position.y - 110
+        node.zPosition = 4
+        
+        addChild(node)
+        
+        let action = SKAction.sequence([
+            SKAction.fadeIn(withDuration: 0.1),
+            SKAction.wait(forDuration: 3.0),
+            SKAction.fadeOut(withDuration: 0.2),
+            SKAction.removeFromParent()
+        ])
+        
+        node.run(action)
     }
 }
