@@ -37,9 +37,10 @@ class Level1 : GameScene {
         
         if doorOpen {
             let nextLevel = GameScene(fileNamed: "Level2")
+            Data.currentLevel = 2
             nextLevel?.scaleMode = .aspectFill
             view?.presentScene(nextLevel)
-            run(Sound.levelUp.action)
+            //run(Sound.levelUp.action)
         }
     }
 }

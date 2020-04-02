@@ -35,11 +35,9 @@ class GameScene: SKScene {
     
     // Measure
     var knobRadius : CGFloat = 50.0
-    var jumpInterval : CGFloat = 0.0
     
     // Score
     let scoreLabel = SKLabelNode()
-    var score = 0
     
     // Key
     var keyContainer = SKLabelNode()
@@ -60,9 +58,6 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
-        
-        let soundAction = SKAction.repeatForever(SKAction.playSoundFileNamed("music.wav", waitForCompletion: false))
-        run(soundAction)
         
         player = childNode(withName: "player")
         joystick = childNode(withName: "Joystick")
@@ -90,7 +85,7 @@ class GameScene: SKScene {
         heartContainer.position = CGPoint(x: -300, y: 140)
         heartContainer.zPosition = 5
         cameraNode?.addChild(heartContainer)
-        self.fillHearts(count: 5)
+        self.fillHearts(count: Data.health)
         
         keyContainer.position = CGPoint(x: (cameraNode?.position.x)! + 250, y: 150)
         keyContainer.zPosition = 5
@@ -111,7 +106,7 @@ class GameScene: SKScene {
         scoreLabel.fontSize = 24
         scoreLabel.fontName = "AvenirNext-Bold"
         scoreLabel.horizontalAlignmentMode = .right
-        scoreLabel.text = String(score)
+        scoreLabel.text = String(Data.collectedCoin)
         cameraNode?.addChild(scoreLabel)
     }
 }
@@ -124,7 +119,6 @@ extension GameScene{
                 let location = touch.location(in: joystick!)
                 joystickAction = joystickKnob.frame.contains(location)
             }
-            
             
             //let location = touch.location(in: self)
             //if !(joystick?.contains(location))! {
@@ -179,8 +173,8 @@ extension GameScene {
     }
     
     func rewardTouch() {
-        score += 1
-        scoreLabel.text = String(score)
+        Data.collectedCoin += 1
+        scoreLabel.text = String(Data.collectedCoin)
     }
     
     func fillHearts(count: Int) {
@@ -196,6 +190,7 @@ extension GameScene {
     func loseHeart() {
         if isHit {
             let lastElementIndex = heartArray.count - 1
+            Data.health -= 1
             if heartArray.indices.contains(lastElementIndex - 1) {
                 let lastHeart = heartArray[lastElementIndex]
                 lastHeart.removeFromParent()
@@ -219,7 +214,8 @@ extension GameScene {
     }
     
     func LostAllHearts() {
-        fillHearts(count: 5)
+        Data.health = 5
+        fillHearts(count: Data.health)
         let gameOverScene = GameScene(fileNamed: "GameOver")
         self.view?.presentScene(gameOverScene)
     }
@@ -316,7 +312,6 @@ extension GameScene: SKPhysicsContactDelegate {
         
         if collision.matches(.player, .killing)  {
             if isHit == false {
-                run(Sound.hit.action)
                 isHit = true
                 loseHeart()
                 Dying()
@@ -335,7 +330,6 @@ extension GameScene: SKPhysicsContactDelegate {
                 if rewardIsNotTouched {
                     rewardTouch()
                     rewardIsNotTouched = false
-                    run(Sound.reward.action)
                 }
             } else if contact.bodyB.node?.name == "jewel" {
                 contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
@@ -343,7 +337,6 @@ extension GameScene: SKPhysicsContactDelegate {
                 if rewardIsNotTouched {
                     rewardTouch()
                     rewardIsNotTouched = false
-                    run(Sound.reward.action)
                 }
             }
 
@@ -353,13 +346,11 @@ extension GameScene: SKPhysicsContactDelegate {
                 contact.bodyA.node?.removeFromParent()
                 keyContainer.alpha = 1.0
                 hasKey = true
-                run(Sound.reward.action)
             } else if contact.bodyB.node?.name == "key" {
                 contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
                 contact.bodyB.node?.removeFromParent()
                 keyContainer.alpha = 1.0
                 hasKey = true
-                run(Sound.reward.action)
             }
             
         }
@@ -389,7 +380,6 @@ extension GameScene: SKPhysicsContactDelegate {
                 createMolten(at: meteor.position)
                 meteor.removeFromParent()
             }
-            run(Sound.meteorFalling.action)
         }
     }
 }
