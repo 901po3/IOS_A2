@@ -30,6 +30,8 @@ class GameScene: SKScene {
     var jumping = false
     var rewardIsNotTouched = true
     var isHit = false
+    var hasKey = false
+    var doorOpen = false
     
     // Measure
     var knobRadius : CGFloat = 50.0
@@ -38,6 +40,9 @@ class GameScene: SKScene {
     // Score
     let scoreLabel = SKLabelNode()
     var score = 0
+    
+    // Key
+    var keyContainer = SKLabelNode()
     
     // Heart
     var heartArray = [SKSpriteNode]()
@@ -83,6 +88,14 @@ class GameScene: SKScene {
         heartContainer.zPosition = 5
         cameraNode?.addChild(heartContainer)
         self.fillHearts(count: 5)
+        
+        keyContainer.position = CGPoint(x: (cameraNode?.position.x)! + 250, y: 150)
+        keyContainer.zPosition = 5
+        keyContainer.alpha = 0.2
+        cameraNode?.addChild(keyContainer)
+        let key = SKSpriteNode(imageNamed: "key")
+        key.size = CGSize(width: 27, height: 27)
+        keyContainer.addChild(key)
         
         // Timer
         //Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
@@ -183,7 +196,7 @@ extension GameScene {
                 let lastHeart = heartArray[lastElementIndex]
                 lastHeart.removeFromParent()
                 heartArray.remove(at: lastElementIndex)
-                Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
                     self.isHit = false
                 }
             }
@@ -203,7 +216,11 @@ extension GameScene {
     
     func LostAllHearts() {
         fillHearts(count: 5)
+        let gameOverScene = GameScene(fileNamed: "GameOver")
+        self.view?.presentScene(gameOverScene)
     }
+    
+    
     
     func Dying() {
         let dieAction = SKAction.move(to: CGPoint(x: -300, y: 0), duration: 0.1)
@@ -277,8 +294,8 @@ extension GameScene: SKPhysicsContactDelegate {
     struct Collision {
         
         enum Masks: Int {
-            case killing, player, reward, ground //1,2,3,4
-            var bitmask: UInt32 { return 1 << self.rawValue } //1,2,4,8
+            case killing, player, reward, ground, door //1,2,3,4,5
+            var bitmask: UInt32 { return 1 << self.rawValue } //1,2,4,8,16
         }
         
         let masks: (first: UInt32, second: UInt32)
@@ -310,14 +327,43 @@ extension GameScene: SKPhysicsContactDelegate {
             if contact.bodyA.node?.name == "jewel" {
                 contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
                 contact.bodyA.node?.removeFromParent()
+                if rewardIsNotTouched {
+                    rewardTouch()
+                    rewardIsNotTouched = false
+                }
             } else if contact.bodyB.node?.name == "jewel" {
                 contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
                 contact.bodyB.node?.removeFromParent()
+                if rewardIsNotTouched {
+                    rewardTouch()
+                    rewardIsNotTouched = false
+                }
+            }
+
+            
+            if contact.bodyA.node?.name == "key" {
+                contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyA.node?.removeFromParent()
+                keyContainer.alpha = 1.0
+                hasKey = true
+            } else if contact.bodyB.node?.name == "key" {
+                contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyB.node?.removeFromParent()
+                keyContainer.alpha = 1.0
+                hasKey = true
             }
             
-            if rewardIsNotTouched {
-                rewardTouch()
-                rewardIsNotTouched = false
+        }
+        
+        if collision.matches(.player, .door) {
+            if contact.bodyA.node?.name == "door" && hasKey {
+                contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
+                os_log("go to next level")
+                doorOpen = true
+            } else if contact.bodyB.node?.name == "door" && hasKey {
+                contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
+                os_log("go to next level")
+                doorOpen = true
             }
         }
         
