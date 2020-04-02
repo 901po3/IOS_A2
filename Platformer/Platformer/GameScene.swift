@@ -25,12 +25,13 @@ class GameScene: SKScene {
     var star2 : SKNode?
     var moon : SKNode?
     
-    //boolean
+    // Boolean
     var joystickAction = false
     var jumping = false
     var rewardIsNotTouched = true
+    var isHit = false
     
-    //Measure
+    // Measure
     var knobRadius : CGFloat = 50.0
     var jumpInterval : CGFloat = 0.0
     
@@ -38,15 +39,19 @@ class GameScene: SKScene {
     let scoreLabel = SKLabelNode()
     var score = 0
     
+    // Heart
+    var heartArray = [SKSpriteNode]()
+    let heartContainer = SKLabelNode()
+    
     //Sprite Engine
     var previousTimeInterval : TimeInterval = 0
     var playerIsFacingRight = true
     let playerSpeed = 4.0
     
-    //Player State
+    // Player State
     var playerStateMachine : GKStateMachine!
     
-    //didmove
+    // didmove
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
@@ -72,6 +77,12 @@ class GameScene: SKScene {
         ])
         
         playerStateMachine.enter(IdleState.self)
+        
+        // Hearts
+        heartContainer.position = CGPoint(x: -300, y: 140)
+        heartContainer.zPosition = 5
+        cameraNode?.addChild(heartContainer)
+        self.fillHearts(count: 5)
         
         // Timer
         //Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
@@ -153,6 +164,51 @@ extension GameScene {
     func rewardTouch() {
         score += 1
         scoreLabel.text = String(score)
+    }
+    
+    func fillHearts(count: Int) {
+        for index in 1...count {
+            let heart = SKSpriteNode(imageNamed: "heart")
+            let xPosition = heart.size.width * CGFloat(index - 1)
+            heart.position = CGPoint(x: xPosition, y: 0)
+            heartArray.append(heart)
+            heartContainer.addChild(heart)
+        }
+    }
+    
+    func loseHeart() {
+        if isHit {
+            let lastElementIndex = heartArray.count - 1
+            if heartArray.indices.contains(lastElementIndex - 1) {
+                let lastHeart = heartArray[lastElementIndex]
+                lastHeart.removeFromParent()
+                heartArray.remove(at: lastElementIndex)
+                Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+                    self.isHit = false
+                }
+            }
+            else {
+                LostAllHearts()
+            }
+            //invincible()
+        }
+    }
+    
+    func invincible() {
+        player?.physicsBody?.categoryBitMask = 0
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+            self.player?.physicsBody?.categoryBitMask = 2
+        }
+    }
+    
+    func LostAllHearts() {
+        fillHearts(count: 5)
+    }
+    
+    func Dying() {
+        let dieAction = SKAction.move(to: CGPoint(x: -300, y: 0), duration: 0.1)
+        player?.run(dieAction)
+        self.removeAllActions()
     }
 }
 
@@ -237,10 +293,12 @@ extension GameScene: SKPhysicsContactDelegate {
         
         let collision = Collision(masks: (first: contact.bodyA.categoryBitMask, second: contact.bodyB.categoryBitMask))
         
-        if collision.matches(.player, .killing) {
-            let die = SKAction.move(to: CGPoint(x: -300, y: -100), duration: 0.0) //back to initial position
-            os_log("trap")
-            player?.run(die)
+        if collision.matches(.player, .killing)  {
+            if isHit == false {
+                isHit = true
+                loseHeart()
+                Dying()
+            }
         }
         
         if collision.matches(.player, .ground) {
