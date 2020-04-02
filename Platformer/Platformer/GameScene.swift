@@ -25,23 +25,33 @@ class GameScene: SKScene {
     var star2 : SKNode?
     var moon : SKNode?
     
-    //boolean
+    // Boolean
     var joystickAction = false
     var jumping = false
+    var rewardIsNotTouched = true
+    var isHit = false
     
-    //Measure
+    // Measure
     var knobRadius : CGFloat = 50.0
     var jumpInterval : CGFloat = 0.0
+    
+    // Score
+    let scoreLabel = SKLabelNode()
+    var score = 0
+    
+    // Heart
+    var heartArray = [SKSpriteNode]()
+    let heartContainer = SKLabelNode()
     
     //Sprite Engine
     var previousTimeInterval : TimeInterval = 0
     var playerIsFacingRight = true
     let playerSpeed = 4.0
     
-    //Player State
+    // Player State
     var playerStateMachine : GKStateMachine!
     
-    //didmove
+    // didmove
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
@@ -68,10 +78,25 @@ class GameScene: SKScene {
         
         playerStateMachine.enter(IdleState.self)
         
+        // Hearts
+        heartContainer.position = CGPoint(x: -300, y: 140)
+        heartContainer.zPosition = 5
+        cameraNode?.addChild(heartContainer)
+        self.fillHearts(count: 5)
+        
         // Timer
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
-            self.spawnMeteor()
-        }
+        //Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
+        //    os_log("timer fired")
+        //    self.spawnMeteor()
+        //}
+        
+        scoreLabel.position = CGPoint(x: (cameraNode?.position.x)! +  310, y: 140)
+        scoreLabel.fontColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
+        scoreLabel.fontSize = 24
+        scoreLabel.fontName = "AvenirNext-Bold"
+        scoreLabel.horizontalAlignmentMode = .right
+        scoreLabel.text = String(score)
+        cameraNode?.addChild(scoreLabel)
     }
 }
 
@@ -126,6 +151,7 @@ extension GameScene{
 
 //MARK: Action
 extension GameScene {
+    
     func resetKnobPosition() {
         let initialPoint = CGPoint(x: 0, y: 0)
         //let moveBack = SKAction.move(to: initialPoint, duration: 0.1)
@@ -134,6 +160,56 @@ extension GameScene {
         joystickKnob?.position = initialPoint
         joystickAction = false
     }
+    
+    func rewardTouch() {
+        score += 1
+        scoreLabel.text = String(score)
+    }
+    
+    func fillHearts(count: Int) {
+        for index in 1...count {
+            let heart = SKSpriteNode(imageNamed: "heart")
+            let xPosition = heart.size.width * CGFloat(index - 1)
+            heart.position = CGPoint(x: xPosition, y: 0)
+            heartArray.append(heart)
+            heartContainer.addChild(heart)
+        }
+    }
+    
+    func loseHeart() {
+        if isHit {
+            let lastElementIndex = heartArray.count - 1
+            if heartArray.indices.contains(lastElementIndex - 1) {
+                let lastHeart = heartArray[lastElementIndex]
+                lastHeart.removeFromParent()
+                heartArray.remove(at: lastElementIndex)
+                Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+                    self.isHit = false
+                }
+            }
+            else {
+                LostAllHearts()
+            }
+            //invincible()
+        }
+    }
+    
+    func invincible() {
+        player?.physicsBody?.categoryBitMask = 0
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { (timer) in
+            self.player?.physicsBody?.categoryBitMask = 2
+        }
+    }
+    
+    func LostAllHearts() {
+        fillHearts(count: 5)
+    }
+    
+    func Dying() {
+        let dieAction = SKAction.move(to: CGPoint(x: -300, y: 0), duration: 0.1)
+        player?.run(dieAction)
+        self.removeAllActions()
+    }
 }
 
 //MARK : Game Loop
@@ -141,6 +217,8 @@ extension GameScene {
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - previousTimeInterval
         previousTimeInterval = currentTime
+        
+        rewardIsNotTouched = true
         
         //Camera
         cameraNode?.position.x = player!.position.x
@@ -215,16 +293,43 @@ extension GameScene: SKPhysicsContactDelegate {
         
         let collision = Collision(masks: (first: contact.bodyA.categoryBitMask, second: contact.bodyB.categoryBitMask))
         
-        if collision.matches(.player, .killing) {
-            let die = SKAction.move(to: CGPoint(x: -300, y: -100), duration: 0.0) //back to initial position
-            os_log("trap")
-            player?.run(die)
+        if collision.matches(.player, .killing)  {
+            if isHit == false {
+                isHit = true
+                loseHeart()
+                Dying()
+            }
         }
         
         if collision.matches(.player, .ground) {
-            
             jumping = false
+        }
+        
+        if collision.matches(.player, .reward) {
             
+            if contact.bodyA.node?.name == "jewel" {
+                contact.bodyA.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyA.node?.removeFromParent()
+            } else if contact.bodyB.node?.name == "jewel" {
+                contact.bodyB.node?.physicsBody?.categoryBitMask = 0;
+                contact.bodyB.node?.removeFromParent()
+            }
+            
+            if rewardIsNotTouched {
+                rewardTouch()
+                rewardIsNotTouched = false
+            }
+        }
+        
+        if collision.matches(.ground, .killing) {
+            if contact.bodyA.node?.name == "Meteor", let meteor = contact.bodyA.node {
+                createMolten(at: meteor.position)
+                meteor.removeFromParent()
+            }
+            if contact.bodyB.node?.name == "Meteor", let meteor = contact.bodyB.node {
+                createMolten(at: meteor.position)
+                meteor.removeFromParent()
+            }
         }
     }
 }
@@ -239,23 +344,42 @@ extension GameScene {
         node.name = "Meteor"
         let randomXPosition = Int(arc4random_uniform(UInt32(self.size.width)))
         
-        node.position = CGPoint(x: randomXPosition, y: 270)
+        node.position = CGPoint(x: randomXPosition, y: 0)
         node.anchorPoint = CGPoint(x: 0.5, y: 1)
         node.zPosition = 5
         
         let physcisBody = SKPhysicsBody(circleOfRadius: 30)
-        node.physicsBody = physicsBody
-        
-        physicsBody?.categoryBitMask = Collision.Masks.killing.bitmask
-        physicsBody?.collisionBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
-        physcisBody.contactTestBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
-        physcisBody.fieldBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
         
         physcisBody.affectedByGravity = true
         physcisBody.allowsRotation = false
         physcisBody.restitution = 0.2
         physcisBody.friction = 10
+                
+        physicsBody!.categoryBitMask = Collision.Masks.killing.bitmask
+        physicsBody!.collisionBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.contactTestBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        physcisBody.fieldBitMask = Collision.Masks.player.bitmask | Collision.Masks.ground.bitmask
+        
+        node.physicsBody = physcisBody
         
         addChild(node)
+    }
+    
+    func createMolten(at position: CGPoint) {
+        let node = SKSpriteNode(imageNamed: "molten")
+        node.position.x = position.x
+        node.position.y = position.y - 110
+        node.zPosition = 4
+        
+        addChild(node)
+        
+        let action = SKAction.sequence([
+            SKAction.fadeIn(withDuration: 0.1),
+            SKAction.wait(forDuration: 3.0),
+            SKAction.fadeOut(withDuration: 0.2),
+            SKAction.removeFromParent()
+        ])
+        
+        node.run(action)
     }
 }
