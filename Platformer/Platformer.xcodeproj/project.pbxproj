@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		60818630243574F3009DCF84 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 6081862F243574F3009DCF84 /* audio */; };
-		608186322435759A009DCF84 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = 608186312435759A009DCF84 /* GameOver.sks */; };
 		60A7883B2432B06A0043B782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A7883A2432B06A0043B782 /* AppDelegate.swift */; };
 		60A7883D2432B06A0043B782 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60A7883C2432B06A0043B782 /* GameScene.sks */; };
 		60A7883F2432B06A0043B782 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60A7883E2432B06A0043B782 /* Actions.sks */; };
@@ -41,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		6081862F243574F3009DCF84 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = ../../assets/audio; sourceTree = "<group>"; };
-		608186312435759A009DCF84 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = GameOver.sks; path = ../../assets/GameOver.sks; sourceTree = "<group>"; };
 		60A788372432B06A0043B782 /* Platformer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Platformer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60A7883A2432B06A0043B782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60A7883C2432B06A0043B782 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 			children = (
 				60A7883A2432B06A0043B782 /* AppDelegate.swift */,
 				60A7883C2432B06A0043B782 /* GameScene.sks */,
-				608186312435759A009DCF84 /* GameOver.sks */,
 				60A7883E2432B06A0043B782 /* Actions.sks */,
 				60A788402432B06A0043B782 /* GameScene.swift */,
 				60CB3AE22434350E001D4BCF /* playerStateMachine.swift */,
@@ -248,7 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				60A788462432B06A0043B782 /* Main.storyboard in Resources */,
-				608186322435759A009DCF84 /* GameOver.sks in Resources */,
 				60A7883D2432B06A0043B782 /* GameScene.sks in Resources */,
 				60A788482432B06D0043B782 /* Assets.xcassets in Resources */,
 				60818630243574F3009DCF84 /* audio in Resources */,
