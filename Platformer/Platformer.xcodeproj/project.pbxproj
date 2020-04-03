@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6020CE7B2436EABA0084B057 /* WinScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6020CE7A2436EABA0084B057 /* WinScreen.swift */; };
+		6020CE7F2436EB990084B057 /* Level4.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6020CE7E2436EB980084B057 /* Level4.sks */; };
+		6020CE832436EC1B0084B057 /* WinScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6020CE822436EC1B0084B057 /* WinScreen.sks */; };
 		60292DA62435879D00C59AFE /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60292DA52435879D00C59AFE /* Level2.sks */; };
 		60818630243574F3009DCF84 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 6081862F243574F3009DCF84 /* audio */; };
 		6081863424357774009DCF84 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6081863324357774009DCF84 /* GameOver.sks */; };
@@ -27,6 +29,7 @@
 		60B55C83243594BD002825E5 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B55C82243594BD002825E5 /* Sound.swift */; };
 		60B55C8524359AA9002825E5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B55C8424359AA9002825E5 /* Data.swift */; };
 		60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB3AE22434350E001D4BCF /* playerStateMachine.swift */; };
+		60F129702436F52D00772620 /* Level5.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60F1296F2436F52D00772620 /* Level5.sks */; };
 		60F987782436DD3300204D98 /* Level3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987772436DD3300204D98 /* Level3.swift */; };
 		60F9877A2436DD4000204D98 /* Level4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987792436DD4000204D98 /* Level4.swift */; };
 		60F9877C2436DD4900204D98 /* Level5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9877B2436DD4900204D98 /* Level5.swift */; };
@@ -52,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		6020CE7A2436EABA0084B057 /* WinScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinScreen.swift; sourceTree = "<group>"; };
+		6020CE7E2436EB980084B057 /* Level4.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level4.sks; sourceTree = "<group>"; };
+		6020CE822436EC1B0084B057 /* WinScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WinScreen.sks; sourceTree = "<group>"; };
 		60292DA52435879D00C59AFE /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
 		6081862F243574F3009DCF84 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = ../../assets/audio; sourceTree = "<group>"; };
 		6081863324357774009DCF84 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = GameOver.sks; path = ../../assets/GameOver.sks; sourceTree = "<group>"; };
@@ -77,6 +82,7 @@
 		60B55C82243594BD002825E5 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		60B55C8424359AA9002825E5 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		60CB3AE22434350E001D4BCF /* playerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playerStateMachine.swift; sourceTree = "<group>"; };
+		60F1296F2436F52D00772620 /* Level5.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level5.sks; sourceTree = "<group>"; };
 		60F987772436DD3300204D98 /* Level3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level3.swift; sourceTree = "<group>"; };
 		60F987792436DD4000204D98 /* Level4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level4.swift; sourceTree = "<group>"; };
 		60F9877B2436DD4900204D98 /* Level5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level5.swift; sourceTree = "<group>"; };
@@ -140,10 +146,13 @@
 				60F987772436DD3300204D98 /* Level3.swift */,
 				60F9877D2436E63B00204D98 /* Level3.sks */,
 				60F987792436DD4000204D98 /* Level4.swift */,
+				6020CE7E2436EB980084B057 /* Level4.sks */,
 				60F9877B2436DD4900204D98 /* Level5.swift */,
+				60F1296F2436F52D00772620 /* Level5.sks */,
 				6081863524357B44009DCF84 /* GameOver.swift */,
 				6081863324357774009DCF84 /* GameOver.sks */,
 				6020CE7A2436EABA0084B057 /* WinScreen.swift */,
+				6020CE822436EC1B0084B057 /* WinScreen.sks */,
 				60CB3AE22434350E001D4BCF /* playerStateMachine.swift */,
 				60B55C82243594BD002825E5 /* Sound.swift */,
 				60A788422432B06A0043B782 /* GameViewController.swift */,
@@ -281,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60A788462432B06A0043B782 /* Main.storyboard in Resources */,
+				6020CE832436EC1B0084B057 /* WinScreen.sks in Resources */,
 				6081863424357774009DCF84 /* GameOver.sks in Resources */,
 				60A7883D2432B06A0043B782 /* Level1.sks in Resources */,
 				60F9877E2436E63C00204D98 /* Level3.sks in Resources */,
@@ -289,6 +299,8 @@
 				60818630243574F3009DCF84 /* audio in Resources */,
 				60A7884B2432B06D0043B782 /* LaunchScreen.storyboard in Resources */,
 				60A7883F2432B06A0043B782 /* Actions.sks in Resources */,
+				60F129702436F52D00772620 /* Level5.sks in Resources */,
+				6020CE7F2436EB990084B057 /* Level4.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

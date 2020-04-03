@@ -7,3 +7,17 @@
 //
 
 import Foundation
+import SpriteKit
+
+class WinScreen : SKScene {
+    override func sceneDidLoad() {
+        Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { (timer) in
+            Data.collectedCoin = 0
+            Data.currentLevel = 1
+            Data.health = 5
+            let level1 = GameScene(fileNamed: "Level1")
+            self.view?.presentScene(level1)
+            self.removeAllActions()
+        }
+    }
+}

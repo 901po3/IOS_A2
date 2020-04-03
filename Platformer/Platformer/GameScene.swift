@@ -24,6 +24,7 @@ class GameScene: SKScene {
     var star1 : SKNode?
     var star2 : SKNode?
     var moon : SKNode?
+    var sun : SKNode?
     
     // Boolean
     var joystickAction = false
@@ -32,9 +33,14 @@ class GameScene: SKScene {
     var isHit = false
     var hasKey = false
     var doorOpen = false
+    var timeOut = false
     
     // Measure
     var knobRadius : CGFloat = 50.0
+    
+    // Timer
+    let timerLabel = SKLabelNode()
+    var time = 180
     
     // Score
     let scoreLabel = SKLabelNode()
@@ -70,6 +76,7 @@ class GameScene: SKScene {
         star1 = childNode(withName: "star1")
         star2 = childNode(withName: "star2")
         moon = childNode(withName: "moon")
+        sun = childNode(withName: "sun")
 
         playerStateMachine = GKStateMachine(states: [
             JumpingState(playerNode: player!),
@@ -96,10 +103,18 @@ class GameScene: SKScene {
         keyContainer.addChild(key)
         
         // Timer
-        //Timer.scheduledTimer(withTimeInterval: 2, repeats: true) {(timer) in
-        //    os_log("timer fired")
-        //    self.spawnMeteor()
-        //}
+        timerLabel.position = CGPoint(x: (cameraNode?.position.x)! + 310, y: 100)
+        timerLabel.fontColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        timerLabel.fontSize = 24
+        timerLabel.fontName = "AvenirNext-Bold"
+        timerLabel.horizontalAlignmentMode = .right
+        timerLabel.text = String(" ")
+        cameraNode?.addChild(timerLabel)
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {(timer) in
+            self.TimeCounter()
+        }
+        
+        
         
         scoreLabel.position = CGPoint(x: (cameraNode?.position.x)! +  310, y: 140)
         scoreLabel.fontColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
@@ -188,7 +203,7 @@ extension GameScene {
     }
     
     func loseHeart() {
-        if isHit {
+        if isHit || timeOut {
             let lastElementIndex = heartArray.count - 1
             Data.health -= 1
             if heartArray.indices.contains(lastElementIndex - 1) {
@@ -197,6 +212,7 @@ extension GameScene {
                 heartArray.remove(at: lastElementIndex)
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
                     self.isHit = false
+                    self.timeOut = false
                 }
             }
             else {
@@ -220,12 +236,23 @@ extension GameScene {
         self.view?.presentScene(gameOverScene)
     }
     
-    
-    
     func Dying() {
+        time = 180
         let dieAction = SKAction.move(to: CGPoint(x: -300, y: 0), duration: 0.1)
         player?.run(dieAction)
         self.removeAllActions()
+    }
+    
+    func TimeCounter() {
+        if time > 0 {
+            time -= 1
+            timerLabel.text = String("time: \(time)")
+        }
+        if time == 0 {
+            timeOut = true
+            loseHeart()
+            Dying()
+        }
     }
 }
 
@@ -276,6 +303,7 @@ extension GameScene {
             star1?.run(parallx4)
             star2?.run(parallx4)
             moon?.run(parallx4)
+            sun?.run(parallx4)
         
         // Player Jump
         if joystickKnob.position.y > 20 && !jumping {
