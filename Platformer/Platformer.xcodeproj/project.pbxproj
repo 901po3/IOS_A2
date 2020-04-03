@@ -26,6 +26,9 @@
 		60B55C83243594BD002825E5 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B55C82243594BD002825E5 /* Sound.swift */; };
 		60B55C8524359AA9002825E5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B55C8424359AA9002825E5 /* Data.swift */; };
 		60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CB3AE22434350E001D4BCF /* playerStateMachine.swift */; };
+		60F987782436DD3300204D98 /* Level3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987772436DD3300204D98 /* Level3.swift */; };
+		60F9877A2436DD4000204D98 /* Level4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987792436DD4000204D98 /* Level4.swift */; };
+		60F9877C2436DD4900204D98 /* Level5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9877B2436DD4900204D98 /* Level5.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		60B55C82243594BD002825E5 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		60B55C8424359AA9002825E5 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		60CB3AE22434350E001D4BCF /* playerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playerStateMachine.swift; sourceTree = "<group>"; };
+		60F987772436DD3300204D98 /* Level3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level3.swift; sourceTree = "<group>"; };
+		60F987792436DD4000204D98 /* Level4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level4.swift; sourceTree = "<group>"; };
+		60F9877B2436DD4900204D98 /* Level5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level5.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +133,9 @@
 				60A7883C2432B06A0043B782 /* Level1.sks */,
 				6081863924357E7E009DCF84 /* Level2.swift */,
 				60292DA52435879D00C59AFE /* Level2.sks */,
+				60F987772436DD3300204D98 /* Level3.swift */,
+				60F987792436DD4000204D98 /* Level4.swift */,
+				60F9877B2436DD4900204D98 /* Level5.swift */,
 				6081863524357B44009DCF84 /* GameOver.swift */,
 				6081863324357774009DCF84 /* GameOver.sks */,
 				60CB3AE22434350E001D4BCF /* playerStateMachine.swift */,
@@ -297,9 +306,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60F9877C2436DD4900204D98 /* Level5.swift in Sources */,
+				60F987782436DD3300204D98 /* Level3.swift in Sources */,
 				6081863824357C69009DCF84 /* Level1.swift in Sources */,
 				60A788412432B06A0043B782 /* GameScene.swift in Sources */,
 				60A788432432B06A0043B782 /* GameViewController.swift in Sources */,
+				60F9877A2436DD4000204D98 /* Level4.swift in Sources */,
 				60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */,
 				6081863624357B44009DCF84 /* GameOver.swift in Sources */,
 				6081863A24357E7E009DCF84 /* Level2.swift in Sources */,
