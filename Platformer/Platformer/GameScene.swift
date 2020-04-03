@@ -262,6 +262,7 @@ extension GameScene {
         let deltaTime = currentTime - previousTimeInterval
         previousTimeInterval = currentTime
         
+        
         rewardIsNotTouched = true
         
         //Camera
