@@ -34,5 +34,12 @@ class Level2 : GameScene {
     override func update(_ currentTime: TimeInterval) {
         
         super.update(currentTime)
+        
+        if doorOpen {
+            let nextLevel = GameScene(fileNamed: "Level3")
+            Data.currentLevel = 3
+            nextLevel?.scaleMode = .aspectFill
+            view?.presentScene(nextLevel)
+        }
     }
 }

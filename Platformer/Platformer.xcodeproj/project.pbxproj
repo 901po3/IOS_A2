@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6020CE7B2436EABA0084B057 /* WinScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6020CE7A2436EABA0084B057 /* WinScreen.swift */; };
 		60292DA62435879D00C59AFE /* Level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60292DA52435879D00C59AFE /* Level2.sks */; };
 		60818630243574F3009DCF84 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 6081862F243574F3009DCF84 /* audio */; };
 		6081863424357774009DCF84 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6081863324357774009DCF84 /* GameOver.sks */; };
@@ -29,6 +30,7 @@
 		60F987782436DD3300204D98 /* Level3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987772436DD3300204D98 /* Level3.swift */; };
 		60F9877A2436DD4000204D98 /* Level4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F987792436DD4000204D98 /* Level4.swift */; };
 		60F9877C2436DD4900204D98 /* Level5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9877B2436DD4900204D98 /* Level5.swift */; };
+		60F9877E2436E63C00204D98 /* Level3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 60F9877D2436E63B00204D98 /* Level3.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6020CE7A2436EABA0084B057 /* WinScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinScreen.swift; sourceTree = "<group>"; };
 		60292DA52435879D00C59AFE /* Level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level2.sks; sourceTree = "<group>"; };
 		6081862F243574F3009DCF84 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = ../../assets/audio; sourceTree = "<group>"; };
 		6081863324357774009DCF84 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = GameOver.sks; path = ../../assets/GameOver.sks; sourceTree = "<group>"; };
@@ -77,6 +80,7 @@
 		60F987772436DD3300204D98 /* Level3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level3.swift; sourceTree = "<group>"; };
 		60F987792436DD4000204D98 /* Level4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level4.swift; sourceTree = "<group>"; };
 		60F9877B2436DD4900204D98 /* Level5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level5.swift; sourceTree = "<group>"; };
+		60F9877D2436E63B00204D98 /* Level3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Level3.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,10 +138,12 @@
 				6081863924357E7E009DCF84 /* Level2.swift */,
 				60292DA52435879D00C59AFE /* Level2.sks */,
 				60F987772436DD3300204D98 /* Level3.swift */,
+				60F9877D2436E63B00204D98 /* Level3.sks */,
 				60F987792436DD4000204D98 /* Level4.swift */,
 				60F9877B2436DD4900204D98 /* Level5.swift */,
 				6081863524357B44009DCF84 /* GameOver.swift */,
 				6081863324357774009DCF84 /* GameOver.sks */,
+				6020CE7A2436EABA0084B057 /* WinScreen.swift */,
 				60CB3AE22434350E001D4BCF /* playerStateMachine.swift */,
 				60B55C82243594BD002825E5 /* Sound.swift */,
 				60A788422432B06A0043B782 /* GameViewController.swift */,
@@ -277,6 +283,7 @@
 				60A788462432B06A0043B782 /* Main.storyboard in Resources */,
 				6081863424357774009DCF84 /* GameOver.sks in Resources */,
 				60A7883D2432B06A0043B782 /* Level1.sks in Resources */,
+				60F9877E2436E63C00204D98 /* Level3.sks in Resources */,
 				60292DA62435879D00C59AFE /* Level2.sks in Resources */,
 				60A788482432B06D0043B782 /* Assets.xcassets in Resources */,
 				60818630243574F3009DCF84 /* audio in Resources */,
@@ -310,6 +317,7 @@
 				60F987782436DD3300204D98 /* Level3.swift in Sources */,
 				6081863824357C69009DCF84 /* Level1.swift in Sources */,
 				60A788412432B06A0043B782 /* GameScene.swift in Sources */,
+				6020CE7B2436EABA0084B057 /* WinScreen.swift in Sources */,
 				60A788432432B06A0043B782 /* GameViewController.swift in Sources */,
 				60F9877A2436DD4000204D98 /* Level4.swift in Sources */,
 				60CB3AE32434350E001D4BCF /* playerStateMachine.swift in Sources */,

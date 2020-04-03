@@ -40,7 +40,6 @@ class Level1 : GameScene {
             Data.currentLevel = 2
             nextLevel?.scaleMode = .aspectFill
             view?.presentScene(nextLevel)
-            //run(Sound.levelUp.action)
         }
     }
 }
