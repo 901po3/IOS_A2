@@ -257,7 +257,7 @@ extension GameScene {
     }
 }
 
-//MARK : Game Loop
+//MARK: Game Loop
 extension GameScene {
     override func update(_ currentTime: TimeInterval) {
         let deltaTime = currentTime - previousTimeInterval
